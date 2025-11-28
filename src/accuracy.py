@@ -1,5 +1,8 @@
+import os, ast
 import chess
 import chess.engine
+from tqdm import tqdm
+
 
 def compute_accuracy(moves, engine):
 
@@ -10,7 +13,7 @@ def compute_accuracy(moves, engine):
         The loss = |evaluation_before - evaluation_after| is converted into a normalized accuracy score
 
         Parameters:
-        Moves (list) = list of chess.Move objects
+        Moves (list of str) = list of UCI strings
         Engine (chess.Engine.SimpleEngine) = Stockfish engine instance
 
         Returns:
@@ -20,14 +23,21 @@ def compute_accuracy(moves, engine):
         """
 
     if not isinstance(moves, list):
-        raise TypeError("Moves must be a list of chess.move objects! ")
+        raise TypeError("Moves must be a list of UCI strings! ")
+
+    # Convert UCI strings to move object
+    try:
+        moves = [chess.Move.from_uci(m) for m in moves]
+    except Exception:
+          raise ValueError("Invalid UCI move found in the list")
+          
 
     board = chess.Board()
     accuracies = []
     
-    limit = chess.engine.Limit(depth = 8)
+    limit = chess.engine.Limit(time=0.005)
 
-    for i, move in enumerate(moves):
+    for move in moves:
 
                 # Identify the player who is about to move
                 # board.turn always starts as White and alternates automatically (WHITE -> BLACK -> WHITE ... ) 
@@ -62,3 +72,33 @@ def compute_accuracy(moves, engine):
 
     return accuracies, mean_white_accuracy, mean_black_accuracy
 
+
+def save_accuracy(df, engine, accuracy_path):
+      
+    
+    df["accuracies"] = None
+    df["mean_white_accuracy"] = None
+    df["mean_black_accuracy"] = None
+
+    for i in tqdm(range(len(df)), desc="Accuracy"):
+            
+            moves = df.loc[i, "moves"]
+
+            if isinstance(moves, str):
+                  moves = ast.literal_eval(moves)
+            
+            accuracies, mean_white_accuracy, mean_black_accuracy = compute_accuracy(moves, engine)
+
+            df.loc[i, "accuracies"] = str(accuracies)
+            df.loc[i, "mean_white_accuracy"] = mean_white_accuracy
+            df.loc[i, "mean_black_accuracy"] = mean_black_accuracy
+
+    # Close the motor here
+    engine.quit()
+      
+    # Save to csv
+    df.to_csv(accuracy_path, index = False)
+
+    print(f"Accuracy computed successfully! and saved to {accuracy_path}")
+
+    return df

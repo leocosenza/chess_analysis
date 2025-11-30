@@ -1,9 +1,3 @@
-# Ignore PGN files
-data/Lichess Elite Database
-
-# Ignore Stockfish folder
-stockfish/
-
 # Python cache
 __pycache__/
 *.pyc

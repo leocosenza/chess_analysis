@@ -12,6 +12,8 @@ st.set_page_config(page_title="Chess Move Explorer", layout="wide")
 @st.cache_data
 def load_prefix_data():
     
+    # path
+
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     csv_path = os.path.join(base_dir, "data", "processed", "prefix_stats.csv")
 
@@ -39,9 +41,11 @@ def board_svg_html(board):
 
     3 steps:
     1. chess.svg.board() creates the board image as an SVG text string
-    2. the string is converted to bytes (.encode()) and then encoded into Base64 (base64.b64encode) for safe web embedding
-    3. the resulting Base64 string is inserted directly into the <img> tag as a Data URI (src="data:image/..."), 
-    allowing the browser to render the board instantly
+    2. the string is converted to bytes (.encode()) and then encoded into Base64 (base64.b64encode)
+       for safe web embedding
+    3. the resulting Base64 string is inserted directly into the <img> tag as a Data URI 
+       (src="data:image/..."), allowing the browser to render the board instantly
+       
     """
     svg = chess.svg.board(board=board, size=420)
     b64 = base64.b64encode(svg.encode("utf-8")).decode("utf-8")
@@ -91,12 +95,12 @@ with col_moves:
             except ValueError:
                 st.error("Invalid UCI format. Example: e2e4, g8f6.")
             else:
-                # Controllo legalità sulla posizione corrente
+                # Control legal move
                 if st.session_state.board.is_legal(move):
                     st.session_state.board.push(move)
                     st.session_state.moves.append(uci)
                     st.success(f"Move played: {uci}")
-                    st.rerun()  # ricarica la pagina con la nuova posizione
+                    st.rerun()  
                 else:
                     st.error("Illegal move in the current position.")
 
@@ -132,9 +136,9 @@ with col_stats:
 
         # Colors
         colors = {
-            'White Win': '#EAEAEA', # Quasi bianco
-            'Black Win': '#363636', # Quasi nero
-            'Draw': '#A9A9A9'      # Grigio neutro
+            'White Win': '#EAEAEA', 
+            'Black Win': '#363636', 
+            'Draw': '#A9A9A9'      
         }
         
         # Bar chart

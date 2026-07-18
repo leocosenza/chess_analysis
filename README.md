@@ -1,4 +1,4 @@
-Chess Analysis Project
+♔ Chess Analysis Project
 
 This project analyzes high-level chess games from Lichess and is divided into two main parts:
 
@@ -14,9 +14,17 @@ Results will be visualized through clear and informative plots.
 
 2) Interactive Exploration
 
-Users can select moves step by step:
-1. Choose White’s opening move.
-2. View the most common responses from Black.
-3. Continue selecting moves for both players.
-After a few moves, the system can identify the opening name (if defined).
-At each step, aggregated statistics like win, draw, and loss percentages are provided.
+Try the app -> https://elitechess.streamlit.app/
+
+The interactive application allows users to explore chess positions move by move.
+
+Users can:
+
+1. enter White’s opening move;
+2. view the most common responses from Black;
+3. continue building the move sequence;
+4. identify the corresponding opening, when available;
+5. examine aggregated win, draw, and loss probabilities;
+6. view the most common next moves observed in the dataset.
+
+The application uses aggregated statistics from high-level Lichess games to provide insights into different opening sequences and game outcomes

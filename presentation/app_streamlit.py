@@ -15,7 +15,7 @@ def load_prefix_data():
     # path
 
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    csv_path = os.path.join(base_dir, "data", "processed", "prefix_stats.csv")
+    csv_path = os.path.join(base_dir, "data", "prefix_stats.csv")
 
     df = pd.read_csv(csv_path)
     df["prefix"] = df["prefix"].apply(eval)

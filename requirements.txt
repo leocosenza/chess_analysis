@@ -1,0 +1,7 @@
+pandas
+python-chess
+streamlit
+matplotlib
+seaborn
+plotly
+tqdm
